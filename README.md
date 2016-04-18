@@ -10,7 +10,7 @@ You will be immediately presented with the needed credentials.
 
 
 Example config.json entries:
-
+```json
   "plugins": [
     {
       "plugin": "netatmo",
@@ -38,6 +38,7 @@ Example config.json entries:
       "interval": 30
     }
   ]
+```
 
-  I also added support for NetatmoIndoorModule, NetatmoRainSensor and NetatmoWindGauge
-  but as I don't have the hardware this is completely untested. Feel free to donate hardware.
+I also added support for NetatmoIndoorModule, NetatmoRainSensor and NetatmoWindGauge
+but as I don't have the hardware this is completely untested. Feel free to donate hardware.
