@@ -1,0 +1,29 @@
+{
+  "name": "pimatic-netatmo",
+  "description": "The plugin description",
+  "author": "Your Name <you@example.com> (http://your-website)",
+  "main": "netatmo",
+  "files": [
+    "netatmo.coffee",
+    "README.md",
+    "netatmo-config-schema.coffee"
+  ],
+  "version": "0.0.1",
+  "homepage": "https://github.com/thexperiments/pimatic-netatmo",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/thexperiments/pimatic-netatmo.git"
+  },
+  "configSchema": "netatmo-config-schema.coffee",
+  "dependencies": {
+    "netatmo": "^1.5.0"
+  },
+  "peerDependencies": {
+    "pimatic": "0.8.*"
+  },
+  "engines": {
+    "node": ">0.8.x",
+    "npm": ">1.1.x"
+  }
+}
