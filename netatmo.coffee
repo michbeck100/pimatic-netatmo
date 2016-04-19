@@ -160,16 +160,21 @@ module.exports = (env) ->
       @device_id = @config.device_id
       @interval = 1000 * @config.interval
 
-      
+
       updateValue = =>
         if @config.interval > 0
           @getDeviceData().finally( =>
             env.logger.debug "Scheduling next update for #{@name} with interval #{@interval}ms"
-            setTimeout(updateValue, @interval) 
+            @timeoutId = setTimeout(updateValue, @interval)
           )
       
       super()
       updateValue()
+
+    destroy: () ->
+      clearTimeout(@timeoutId) if @timeoutId?
+      @_currentRequest.cancel() if @_currentRequest?
+      super()
 
     getDeviceData: () ->
      options =
@@ -256,11 +261,16 @@ module.exports = (env) ->
         if @config.interval > 0
           @getDeviceData().finally( =>
             env.logger.debug "Scheduling next update for #{@name} with interval #{@interval}ms"
-            setTimeout(updateValue, @interval) 
+            @timeoutId = setTimeout(updateValue, @interval)
           )
       
       super()
       updateValue()
+
+    destroy: () ->
+      clearTimeout(@timeoutId) if @timeoutId?
+      @_currentRequest.cancel() if @_currentRequest?
+      super()
 
     getDeviceData: () ->
      options =
@@ -340,11 +350,16 @@ module.exports = (env) ->
         if @config.interval > 0
           @getDeviceData().finally( =>
             env.logger.debug "Scheduling next update for #{@name} with interval #{@interval}ms"
-            setTimeout(updateValue, @interval) 
+            @timeoutId = setTimeout(updateValue, @interval)
           )
       
       super()
       updateValue()
+
+    destroy: () ->
+      clearTimeout(@timeoutId) if @timeoutId?
+      @_currentRequest.cancel() if @_currentRequest?
+      super()
 
     getDeviceData: () ->
      options =
@@ -434,11 +449,16 @@ module.exports = (env) ->
         if @config.interval > 0
           @getDeviceData().finally( =>
             env.logger.debug "Scheduling next update for #{@name} with interval #{@interval}ms"
-            setTimeout(updateValue, @interval) 
+            @timeoutId = setTimeout(updateValue, @interval)
           )
       
       super()
       updateValue()
+
+    destroy: () ->
+      clearTimeout(@timeoutId) if @timeoutId?
+      @_currentRequest.cancel() if @_currentRequest?
+      super()
 
     getDeviceData: () ->
      options =
@@ -514,11 +534,16 @@ module.exports = (env) ->
         if @config.interval > 0
           @getDeviceData().finally( =>
             env.logger.debug "Scheduling next update for #{@name} with interval #{@interval}ms"
-            setTimeout(updateValue, @interval) 
+            @timeoutId = setTimeout(updateValue, @interval)
           )
       
       super()
       updateValue()
+
+    destroy: () ->
+      clearTimeout(@timeoutId) if @timeoutId?
+      @_currentRequest.cancel() if @_currentRequest?
+      super()
 
     getDeviceData: () ->
      options =
