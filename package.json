@@ -1,7 +1,7 @@
 {
   "name": "pimatic-netatmo",
   "description": "The plugin description",
-  "author": "Your Name <you@example.com> (http://your-website)",
+  "author": "Lukas Reinhart reinhart.lukas+npm@gmail.com",
   "main": "netatmo",
   "files": [
     "netatmo.coffee",
@@ -10,7 +10,7 @@
   ],
   "version": "0.0.1",
   "homepage": "https://github.com/thexperiments/pimatic-netatmo",
-  "private": true,
+  "private": false,
   "repository": {
     "type": "git",
     "url": "git://github.com/thexperiments/pimatic-netatmo.git"
