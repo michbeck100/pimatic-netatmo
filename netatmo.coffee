@@ -155,10 +155,10 @@ module.exports = (env) ->
     noise = null
 
     constructor: (@config, @plugin, lastState) ->
-      @id = config.id
-      @name = config.name
-      @device_id = config.device_id
-      @interval = 1000 * config.interval
+      @id = @config.id
+      @name = @config.name
+      @device_id = @config.device_id
+      @interval = 1000 * @config.interval
 
       
       updateValue = =>
@@ -245,11 +245,11 @@ module.exports = (env) ->
 
 
     constructor: (@config, @plugin, lastState) ->
-      @id = config.id
-      @name = config.name
-      @device_id = config.device_id
-      @module_id = config.module_id
-      @interval = 1000 * config.interval
+      @id = @config.id
+      @name = @config.name
+      @device_id = @config.device_id
+      @module_id = @config.module_id
+      @interval = 1000 * @config.interval
 
       
       updateValue = =>
@@ -329,11 +329,11 @@ module.exports = (env) ->
     humidity = null
 
     constructor: (@config, @plugin, lastState) ->
-      @id = config.id
-      @name = config.name
-      @device_id = config.device_id
-      @module_id = config.module_id
-      @interval = 1000 * config.interval
+      @id = @config.id
+      @name = @config.name
+      @device_id = @config.device_id
+      @module_id = @config.module_id
+      @interval = 1000 * @config.interval
 
       
       updateValue = =>
@@ -423,11 +423,11 @@ module.exports = (env) ->
     gustdirection = null
 
     constructor: (@config, @plugin, lastState) ->
-      @id = config.id
-      @name = config.name
-      @device_id = config.device_id
-      @module_id = config.module_id
-      @interval = 1000 * config.interval
+      @id = @config.id
+      @name = @config.name
+      @device_id = @config.device_id
+      @module_id = @config.module_id
+      @interval = 1000 * @config.interval
 
       
       updateValue = =>
@@ -503,11 +503,11 @@ module.exports = (env) ->
     rain = null
 
     constructor: (@config, @plugin, lastState) ->
-      @id = config.id
-      @name = config.name
-      @device_id = config.device_id
-      @module_id = config.module_id
-      @interval = 1000 * config.interval
+      @id = @config.id
+      @name = @config.name
+      @device_id = @config.device_id
+      @module_id = @config.module_id
+      @interval = 1000 * @config.interval
 
       
       updateValue = =>
