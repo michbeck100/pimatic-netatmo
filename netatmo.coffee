@@ -65,7 +65,7 @@ module.exports = (env) ->
           #looks like our session got killed, reauthenticate
           env.logger.error "Session seems to be not vailid anymore, trying to reauthenticate"
           @netatmo_api.authenticate @auth
-          
+
         else
           env.logger.warn "Netatmo API warning: #{error.message}"
 
@@ -119,8 +119,56 @@ module.exports = (env) ->
       })
 
 
+  #Netatmo basic device class
+  class NetatmoDevice extends env.devices.Device
+
+    #Basic device constuctor
+    constructor: (@config, @plugin, lastState) ->
+      @id = @config.id
+      @name = @config.name
+      @device_id = @config.device_id
+      @interval = 1000 * @config.interval
+
+
+      updateValue = =>
+        if @config.interval > 0
+          @getDeviceData().finally( =>
+            env.logger.debug "Scheduling next update for #{@name} with interval #{@interval}ms"
+            @timeoutId = setTimeout(updateValue, @interval)
+          )
+      
+      super()
+      updateValue()
+
+    destroy: () ->
+      clearTimeout(@timeoutId) if @timeoutId?
+      @_currentRequest.cancel() if @_currentRequest?
+      super()
+
+    _toFixed: (value, nDecimalDigits) ->
+      if _.isNumber(value)
+        return Number value.toFixed(nDecimalDigits)
+      else
+        return Number value
+
+    _setAttribute: (attributeName, value) ->
+      unless @[attributeName] is value
+        @[attributeName] = value
+        @emit attributeName, value
+
+
+  class NetatmoModuleDevice extends NetatmoDevice
+
+    #Module Device constructor
+    constructor: (@config, @plugin, lastState) ->
+      #for modules we additionally need the module id in the constructor
+      @module_id = @config.module_id
+      #rest is the same as base class
+      super(@config, @plugin, lastState)
+
+
   # Device class Netatmo Base Station
-  class NetatmoBase extends env.devices.Device
+  class NetatmoBase extends NetatmoDevice
     # Attributes
     attributes:
       temperature:
@@ -155,35 +203,12 @@ module.exports = (env) ->
     pressure = null
     noise = null
 
-    constructor: (@config, @plugin, lastState) ->
-      @id = @config.id
-      @name = @config.name
-      @device_id = @config.device_id
-      @interval = 1000 * @config.interval
-
-
-      updateValue = =>
-        if @config.interval > 0
-          @getDeviceData().finally( =>
-            env.logger.debug "Scheduling next update for #{@name} with interval #{@interval}ms"
-            @timeoutId = setTimeout(updateValue, @interval)
-          )
-      
-      super()
-      updateValue()
-
-    destroy: () ->
-      clearTimeout(@timeoutId) if @timeoutId?
-      @_currentRequest.cancel() if @_currentRequest?
-      super()
-
     getDeviceData: () ->
      options =
         device_id: @device_id,
         scale: 'max',
         type: ['Temperature', 'CO2', 'Humidity', 'Pressure', 'Noise'],
         date_end: "last"
-      
        
       @_currentRequest = @plugin.netatmo_api.getMeasureAsync options
       .then (measure) =>
@@ -209,29 +234,15 @@ module.exports = (env) ->
         #we do nothing here,this is hadled by the main error handling
         return true
 
-
     getTemperature: -> @_currentRequest.then(=> @temperature )
     getCo2: -> @_currentRequest.then(=> @co2 )
     getHumidity: -> @_currentRequest.then(=> @humidity )
     getPressure: -> @_currentRequest.then(=> @pressure )
     getNoise: -> @_currentRequest.then(=> @noise )
 
-    _toFixed: (value, nDecimalDigits) ->
-      if _.isNumber(value)
-        return Number value.toFixed(nDecimalDigits)
-      else
-        return Number value
-
-    _setAttribute: (attributeName, value) ->
-      unless @[attributeName] is value
-        @[attributeName] = value
-        @emit attributeName, value
-
-
-
 
   # Device class Netatmo Outdoor Module
-  class NetatmoOutdoorModule extends env.devices.Device
+  class NetatmoOutdoorModule extends NetatmoModuleDevice
     # Attributes
     attributes:
       temperature:
@@ -245,33 +256,8 @@ module.exports = (env) ->
         unit: '%'
         acronym: 'Humidity'
 
-
     temperature = null
     humidity = null
-
-
-    constructor: (@config, @plugin, lastState) ->
-      @id = @config.id
-      @name = @config.name
-      @device_id = @config.device_id
-      @module_id = @config.module_id
-      @interval = 1000 * @config.interval
-
-      
-      updateValue = =>
-        if @config.interval > 0
-          @getDeviceData().finally( =>
-            env.logger.debug "Scheduling next update for #{@name} with interval #{@interval}ms"
-            @timeoutId = setTimeout(updateValue, @interval)
-          )
-      
-      super()
-      updateValue()
-
-    destroy: () ->
-      clearTimeout(@timeoutId) if @timeoutId?
-      @_currentRequest.cancel() if @_currentRequest?
-      super()
 
     getDeviceData: () ->
      options =
@@ -280,8 +266,7 @@ module.exports = (env) ->
         scale: 'max',
         type: ['Temperature', 'Humidity'],
         date_end: "last"
-      
-       
+        
       @_currentRequest = @plugin.netatmo_api.getMeasureAsync options
       .then (measure) =>
         env.logger.debug measure[0].value[0]
@@ -297,25 +282,12 @@ module.exports = (env) ->
         #we do nothing here,this is hadled by the main error handling
         return true
 
-
     getTemperature: -> @_currentRequest.then(=> @temperature )
     getHumidity: -> @_currentRequest.then(=> @humidity )
 
 
-    _toFixed: (value, nDecimalDigits) ->
-      if _.isNumber(value)
-        return Number value.toFixed(nDecimalDigits)
-      else
-        return Number value
-
-    _setAttribute: (attributeName, value) ->
-      unless @[attributeName] is value
-        @[attributeName] = value
-        @emit attributeName, value
-
-
   # Device class Netatmo Indoor Module
-  class NetatmoIndoorModule extends env.devices.Device
+  class NetatmoIndoorModule extends NetatmoModuleDevice
     # Attributes
     attributes:
       temperature:
@@ -334,28 +306,9 @@ module.exports = (env) ->
         unit: '%'
         acronym: 'Humidity'
 
-
     temperature = null
     co2 = null
     humidity = null
-
-    constructor: (@config, @plugin, lastState) ->
-      @id = @config.id
-      @name = @config.name
-      @device_id = @config.device_id
-      @module_id = @config.module_id
-      @interval = 1000 * @config.interval
-
-      
-      updateValue = =>
-        if @config.interval > 0
-          @getDeviceData().finally( =>
-            env.logger.debug "Scheduling next update for #{@name} with interval #{@interval}ms"
-            @timeoutId = setTimeout(updateValue, @interval)
-          )
-      
-      super()
-      updateValue()
 
     destroy: () ->
       clearTimeout(@timeoutId) if @timeoutId?
@@ -369,7 +322,6 @@ module.exports = (env) ->
         scale: 'max',
         type: ['Temperature', 'CO2', 'Humidity'],
         date_end: "last"
-      
        
       @_currentRequest = @plugin.netatmo_api.getMeasureAsync options
       .then (measure) =>
@@ -389,26 +341,13 @@ module.exports = (env) ->
         #we do nothing here,this is hadled by the main error handling
         return true
 
-
     getTemperature: -> @_currentRequest.then(=> @temperature )
     getCo2: -> @_currentRequest.then(=> @co2 )
     getHumidity: -> @_currentRequest.then(=> @humidity )
 
-    _toFixed: (value, nDecimalDigits) ->
-      if _.isNumber(value)
-        return Number value.toFixed(nDecimalDigits)
-      else
-        return Number value
-
-    _setAttribute: (attributeName, value) ->
-      unless @[attributeName] is value
-        @[attributeName] = value
-        @emit attributeName, value
-
-
 
   # Device class Netatmo Wind Module
-  class NetatmoWindGauge extends env.devices.Device
+  class NetatmoWindGauge extends NetatmoModuleDevice
     # Attributes
     attributes:
       windstrength:
@@ -432,34 +371,10 @@ module.exports = (env) ->
         unit: '°'
         acronym: 'Gust dir.'
 
-
     windspeed = null
     winddirection = null
     gustspeed = null
     gustdirection = null
-
-    constructor: (@config, @plugin, lastState) ->
-      @id = @config.id
-      @name = @config.name
-      @device_id = @config.device_id
-      @module_id = @config.module_id
-      @interval = 1000 * @config.interval
-
-      
-      updateValue = =>
-        if @config.interval > 0
-          @getDeviceData().finally( =>
-            env.logger.debug "Scheduling next update for #{@name} with interval #{@interval}ms"
-            @timeoutId = setTimeout(updateValue, @interval)
-          )
-      
-      super()
-      updateValue()
-
-    destroy: () ->
-      clearTimeout(@timeoutId) if @timeoutId?
-      @_currentRequest.cancel() if @_currentRequest?
-      super()
 
     getDeviceData: () ->
      options =
@@ -468,7 +383,6 @@ module.exports = (env) ->
         scale: 'max',
         type: ['WindStrength', 'WindAngle', 'GustStrength', 'GustAngle'],
         date_end: "last"
-      
        
       @_currentRequest = @plugin.netatmo_api.getMeasureAsync options
       .then (measure) =>
@@ -491,28 +405,14 @@ module.exports = (env) ->
         #we do nothing here,this is hadled by the main error handling
         return true
 
-
     getWindspeed: -> @_currentRequest.then(=> @windspeed )
     getWiddirection: -> @_currentRequest.then(=> @winddirection )
     getGustspeed: -> @_currentRequest.then(=> @gustspeed )
     getGustdirection: -> @_currentRequest.then(=> @gustdirection )
 
-    _toFixed: (value, nDecimalDigits) ->
-      if _.isNumber(value)
-        return Number value.toFixed(nDecimalDigits)
-      else
-        return Number value
-
-    _setAttribute: (attributeName, value) ->
-      unless @[attributeName] is value
-        @[attributeName] = value
-        @emit attributeName, value
-
-
-
 
   # Device class Netatmo Wind Module
-  class NetatmoRainSensor extends env.devices.Device
+  class NetatmoRainSensor extends NetatmoModuleDevice
     # Attributes
     attributes:
       rain:
@@ -522,29 +422,6 @@ module.exports = (env) ->
         acronym: 'Rain'
 
     rain = null
-
-    constructor: (@config, @plugin, lastState) ->
-      @id = @config.id
-      @name = @config.name
-      @device_id = @config.device_id
-      @module_id = @config.module_id
-      @interval = 1000 * @config.interval
-
-      
-      updateValue = =>
-        if @config.interval > 0
-          @getDeviceData().finally( =>
-            env.logger.debug "Scheduling next update for #{@name} with interval #{@interval}ms"
-            @timeoutId = setTimeout(updateValue, @interval)
-          )
-      
-      super()
-      updateValue()
-
-    destroy: () ->
-      clearTimeout(@timeoutId) if @timeoutId?
-      @_currentRequest.cancel() if @_currentRequest?
-      super()
 
     getDeviceData: () ->
      options =
@@ -566,24 +443,6 @@ module.exports = (env) ->
       .catch (err) =>
         #we do nothing here,this is hadled by the main error handling
         return true
-
-
-    getRain: -> @_currentRequest.then(=> @rain )
-
-
-    _toFixed: (value, nDecimalDigits) ->
-      if _.isNumber(value)
-        return Number value.toFixed(nDecimalDigits)
-      else
-        return Number value
-
-    _setAttribute: (attributeName, value) ->
-      unless @[attributeName] is value
-        @[attributeName] = value
-        @emit attributeName, value
-
-
-
 
 
   # ###Finally
