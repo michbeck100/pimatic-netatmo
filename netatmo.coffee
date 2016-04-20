@@ -50,11 +50,6 @@ module.exports = (env) ->
           #reconnect after some time
           setTimeout @reconnect, 30000
 
-        else if error.message.match /Status code403/
-          #looks like our session got killed, reauthenticate
-          env.logger.error "Session seems to be not vailid anymore, trying to reauthenticate"
-          @netatmo_api.authenticate @auth
-
         else if error.message.match /Authenticate.*invalid_grant/
           #looks like something is wrong with the credentials
           env.logger.error "Credentials incorrect, please check client_id, client_secret, username and password"
@@ -65,6 +60,12 @@ module.exports = (env) ->
       @netatmo_api.on "warning", (error) =>
         if error.message.match /getMeasure.*No response/
           env.logger.warn "Could not retreive measurement from API, check network connection"
+
+        else if error.message.match /Status code403/
+          #looks like our session got killed, reauthenticate
+          env.logger.error "Session seems to be not vailid anymore, trying to reauthenticate"
+          @netatmo_api.authenticate @auth
+          
         else
           env.logger.warn "Netatmo API warning: #{error.message}"
 
