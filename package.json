@@ -6,9 +6,10 @@
   "files": [
     "netatmo.coffee",
     "README.md",
-    "netatmo-config-schema.coffee"
+    "netatmo-config-schema.coffee",
+	"device-config-schema.coffee"
   ],
-  "version": "0.0.3",
+  "version": "0.0.4",
   "homepage": "https://github.com/thexperiments/pimatic-netatmo",
   "private": false,
   "repository": {
