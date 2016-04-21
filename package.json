@@ -1,13 +1,13 @@
 {
   "name": "pimatic-netatmo",
-  "description": "The plugin description",
+  "description": "Plugin for supporting Netatmo Weather devices in Pimatic",
   "author": "Lukas Reinhart reinhart.lukas+npm@gmail.com",
   "main": "netatmo",
   "files": [
     "netatmo.coffee",
     "README.md",
     "netatmo-config-schema.coffee",
-	"device-config-schema.coffee"
+    "device-config-schema.coffee"
   ],
   "version": "0.0.4",
   "homepage": "https://github.com/thexperiments/pimatic-netatmo",
