@@ -1,7 +1,10 @@
 {
   "name": "pimatic-netatmo",
   "description": "Plugin for supporting Netatmo Weather devices in Pimatic",
-  "author": "Lukas Reinhart reinhart.lukas+npm@gmail.com",
+  "author": {
+    "name": "Lukas Reinhart",
+    "email": "reinhart.lukas+npm@gmail.com"
+  },
   "main": "netatmo",
   "files": [
     "netatmo.coffee",
