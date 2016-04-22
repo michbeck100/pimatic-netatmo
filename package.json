@@ -5,6 +5,7 @@
     "name": "Lukas Reinhart",
     "email": "reinhart.lukas+npm@gmail.com"
   },
+  "license": "GPL-2.0",
   "main": "netatmo",
   "files": [
     "netatmo.coffee",
@@ -18,6 +19,9 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/thexperiments/pimatic-netatmo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/thexperiments/pimatic-netatmo/issues"
   },
   "configSchema": "netatmo-config-schema.coffee",
   "dependencies": {
