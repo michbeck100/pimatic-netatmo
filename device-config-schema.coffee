@@ -8,6 +8,7 @@ module.exports = {
     properties:
       device_id:
         description: "Device ID retrieved from plugin startup output"
+        type: "string"
       interval:
         description: "Polling interval for current measurements (>60s recommended)"
         type: "number"
@@ -21,8 +22,10 @@ module.exports = {
     properties:
       device_id:
         description: "Base Station Device ID retrieved from plugin startup output"
+        type: "string"
       module_id:
         description: "Module ID retrieved from plugin startup output"
+        type: "string"
       interval:
         description: "Polling interval for current measurements (>60s recommended)"
         type: "number"
@@ -36,8 +39,10 @@ module.exports = {
     properties:
       device_id:
         description: "Base Station Device ID retrieved from plugin startup output"
+        type: "string"
       module_id:
         description: "Module ID retrieved from plugin startup output"
+        type: "string"
       interval:
         description: "Polling interval for current measurements (>60s recommended)"
         type: "number"
@@ -51,8 +56,10 @@ module.exports = {
     properties:
       device_id:
         description: "Base Station Device ID retrieved from plugin startup output"
+        type: "string"
       module_id:
         description: "Module ID retrieved from plugin startup output"
+        type: "string"
       interval:
         description: "Polling interval for current measurements (>60s recommended)"
         type: "number"
@@ -66,8 +73,10 @@ module.exports = {
     properties:
       device_id:
         description: "Base Station Device ID retrieved from plugin startup output"
+        type: "string"
       module_id:
         description: "Module ID retrieved from plugin startup output"
+        type: "string"
       interval:
         description: "Polling interval for current measurements (>60s recommended)"
         type: "number"
