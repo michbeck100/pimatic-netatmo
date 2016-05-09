@@ -371,7 +371,7 @@ module.exports = (env) ->
         unit: '°'
         acronym: 'Gust dir.'
 
-    windspeed = null
+    windsstrength = null
     winddirection = null
     gustspeed = null
     gustdirection = null
@@ -389,7 +389,7 @@ module.exports = (env) ->
         env.logger.debug measure[0].value[0]
         if measure
           windspeed = measure[0].value[0][0]
-          @_setAttribute "windspeed", windspeed
+          @_setAttribute "windstrength", windstrength
           
           winddirection = measure[0].value[0][1]
           @_setAttribute "winddirection", winddirection
@@ -405,18 +405,18 @@ module.exports = (env) ->
         #we do nothing here,this is hadled by the main error handling
         return true
 
-    getWindspeed: -> @_currentRequest.then(=> @windspeed )
-    getWiddirection: -> @_currentRequest.then(=> @winddirection )
-    getGustspeed: -> @_currentRequest.then(=> @gustspeed )
+    getWindstrength: -> @_currentRequest.then(=> @windstrength )
+    getWinddirection: -> @_currentRequest.then(=> @winddirection )
+    getGustspeed: -> @_currentRequest.then(=> @gustspeed)
     getGustdirection: -> @_currentRequest.then(=> @gustdirection )
 
 
-  # Device class Netatmo Wind Module
+  # Device class Netatmo Rain Module
   class NetatmoRainSensor extends NetatmoModuleDevice
     # Attributes
     attributes:
       rain:
-        description: "Wind strength measured at Netatmo Wind Gauge"
+        description: "Rain measured at Netatmo Rain Sensor"
         type: "number"
         unit: 'mm'
         acronym: 'Rain'
@@ -444,6 +444,7 @@ module.exports = (env) ->
         #we do nothing here,this is hadled by the main error handling
         return true
 
+    getRain: -> @_currentRequest.then(=> @rain )
 
   # ###Finally
   # Create a instance of my plugin

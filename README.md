@@ -27,7 +27,7 @@ Example config.json entries:
       "name": "My Netatmo Base",
       "class": "NetatmoBase",
       "device_id": "XX:XX:XX:XX:XX:XX",
-      "interval": 30
+      "interval": 60
     },
     {
       "id": "netatmo-otdoor",
@@ -35,7 +35,25 @@ Example config.json entries:
       "class": "NetatmoOutdoorModule",
       "device_id": "XX:XX:XX:XX:XX:XX",
       "module_id": "XX:XX:XX:XX:XX:XX",
-      "interval": 30
+      "interval": 60
+    }
+    ,
+    {
+      "id": "netatmo-wind",
+      "name": "My Netatmo Wind Gauge",
+      "class": "NetatmoWindGauge",
+      "device_id": "XX:XX:XX:XX:XX:XX",
+      "module_id": "XX:XX:XX:XX:XX:XX",
+      "interval": 60
+    }
+    ,
+    {
+      "id": "netatmo-rain",
+      "name": "My Netatmo Rain Sensor",
+      "class": "NetatmoRainSensor",
+      "device_id": "XX:XX:XX:XX:XX:XX",
+      "module_id": "XX:XX:XX:XX:XX:XX",
+      "interval": 60
     }
   ]
 ```
