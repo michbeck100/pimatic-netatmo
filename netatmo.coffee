@@ -371,7 +371,7 @@ module.exports = (env) ->
         unit: '°'
         acronym: 'Gust dir.'
 
-    windsstrength = null
+    windstrength = null
     winddirection = null
     gustspeed = null
     gustdirection = null
