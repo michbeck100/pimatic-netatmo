@@ -388,7 +388,7 @@ module.exports = (env) ->
       .then (measure) =>
         env.logger.debug measure[0].value[0]
         if measure
-          windspeed = measure[0].value[0][0]
+          windstrength = measure[0].value[0][0]
           @_setAttribute "windstrength", windstrength
           
           winddirection = measure[0].value[0][1]
