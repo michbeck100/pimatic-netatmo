@@ -13,7 +13,7 @@
     "netatmo-config-schema.coffee",
     "device-config-schema.coffee"
   ],
-  "version": "0.0.7",
+  "version": "0.0.8",
   "homepage": "https://github.com/thexperiments/pimatic-netatmo",
   "private": false,
   "repository": {
